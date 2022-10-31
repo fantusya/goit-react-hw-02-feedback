@@ -8,7 +8,7 @@ class App extends Component {
   state = {
     good: 0,
     neutral: 0,
-    bad: 0
+    bad: 0,
   };
 
   handleIncrement = data => {
@@ -19,29 +19,37 @@ class App extends Component {
 
   countTotalFeedback = () => {
     const arrayOfValues = Object.values(this.state);
-    return arrayOfValues.reduce(
-      (total, number) => (total + number),
-      0,);
+    return arrayOfValues.reduce((total, number) => total + number, 0);
   };
 
   countPositiveFeedbackPercentage = () => {
-    const {good} = this.state;
+    const { good } = this.state;
     const totalFeedbacks = this.countTotalFeedback();
-    return Math.round(good / totalFeedbacks * 100);
+    return Math.round((good / totalFeedbacks) * 100);
   };
 
   render() {
     const { good, neutral, bad } = this.state;
-    
+
     return (
       <SectionOfFeedback title="Feedback of cafe Expresso">
-        <FeedbackOptions options={this.state} onLeaveFeedback={this.handleIncrement} />
-        {this.countTotalFeedback() === 0
-          ? (<Notification message="There is no feedback" />)
-          : (<Statistics good={good} neutral={neutral} bad={bad} total={this.countTotalFeedback()} positivePercentage={this.countPositiveFeedbackPercentage()} />)}
+        <FeedbackOptions
+          options={Object.keys(this.state)}
+          onLeaveFeedback={this.handleIncrement}
+        />
+        {this.countTotalFeedback() === 0 ? (
+          <Notification message="There is no feedback" />
+        ) : (
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={this.countTotalFeedback()}
+            positivePercentage={this.countPositiveFeedbackPercentage()}
+          />
+        )}
       </SectionOfFeedback>
     );
-    
   }
 }
 
